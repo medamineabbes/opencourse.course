@@ -43,7 +43,6 @@ public class Course {
     @NotNull
     private Long creatorId;
 
-    @NotNull
     private boolean free;
 
     //sections
