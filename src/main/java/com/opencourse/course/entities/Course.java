@@ -27,6 +27,10 @@ public class Course {
     @Size(max=50,message = "the max number of character in title is 50")
     private String title;
     
+    @NotBlank(message = "image is mandatory")
+    @NotNull(message = "image is mandatory")
+    private String imageUrl;
+
     @NotNull(message = "average time is mandatory")
     private int avgTimeInHours;
     

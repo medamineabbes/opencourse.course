@@ -25,4 +25,7 @@ public class Certificate {
     //course
     @ManyToOne
     private Course course;
+
+    @NotNull
+    private Long userId;
 }
