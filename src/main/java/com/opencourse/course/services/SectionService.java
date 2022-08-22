@@ -89,6 +89,7 @@ public class SectionService {
 
     // only from other services
     public Boolean userCreatedSection(Long sectionId,Long userId){
+        
         Section section=sectionRepo.findById(sectionId)
         .orElseThrow(()->new SectionNotFoundException(sectionId));
 

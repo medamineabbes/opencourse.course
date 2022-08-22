@@ -14,7 +14,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-class CourseTopicService {
+public class CourseTopicService {
     private final CourseTopicRepo repo;
 
     //only admin
