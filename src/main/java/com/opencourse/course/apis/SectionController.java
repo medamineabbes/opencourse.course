@@ -56,7 +56,7 @@ public class SectionController {
 
     //only other services
     @PostMapping("/creator")
-    public ResponseEntity<Boolean> userCreatedSection(@RequestBody(required = true) Long userId,Long sectionId){
+    public ResponseEntity<Boolean> userCreatedSection(@RequestParam(required = true) Long userId,@RequestParam(required = true) Long sectionId){
         return ResponseEntity.ok(service.userCreatedSection(sectionId, userId));
     }
 
