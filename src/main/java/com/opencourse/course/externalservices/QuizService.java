@@ -6,19 +6,25 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.opencourse.course.prop.ExternalServicesProp;
+
 import lombok.Data;
 
 @Service
 public class QuizService {
-    private static String baseUrl="https://opencourse-quiz.herokuapp.com/api/v1/quiz";
+
     private RestTemplate restTemplate;
-    public QuizService(){
+    private final ExternalServicesProp prop;
+
+    public QuizService(ExternalServicesProp prop){
         restTemplate=new RestTemplate();
+        this.prop=prop;
     }
+    
     //test if quizs are valid
     //default to true
     public boolean validSections(List<Long> sectionIds){
-        ResponseEntity<Boolean> result=restTemplate.postForEntity(baseUrl+"/valid", sectionIds, Boolean.class);
+        ResponseEntity<Boolean> result=restTemplate.postForEntity(prop.getQuizValidationUrl(), sectionIds, Boolean.class);
         return result.getBody();
     }
 
@@ -28,7 +34,7 @@ public class QuizService {
         VerifyQuizDto vqDto=new VerifyQuizDto();
         vqDto.setSectionIds(sectionIds);
         vqDto.setUserId(userId);
-        ResponseEntity<Boolean> result=restTemplate.postForEntity(baseUrl+"/passed", vqDto, Boolean.class);
+        ResponseEntity<Boolean> result=restTemplate.postForEntity(prop.getQuizFinishedUrl(), vqDto, Boolean.class);
         return result.getBody();
     }
 

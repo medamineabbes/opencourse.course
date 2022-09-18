@@ -6,14 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.opencourse.course.prop.ExternalServicesProp;
+
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class ChapterService {
     
-    private static String baseUrl="https://opencourse-chapter.herokuapp.com/api/v1/chapter";
+    private final ExternalServicesProp prop;
     
     public boolean validSections(List<Long> sectionIds){
         RestTemplate restTemplate=new RestTemplate();
-        ResponseEntity<Boolean> result=restTemplate.postForEntity(baseUrl+"/valid", sectionIds, Boolean.class);
+        ResponseEntity<Boolean> result=restTemplate.postForEntity(prop.getValidChapterUrl(), sectionIds, Boolean.class);
         return result.getBody();
     }
+    
 }
