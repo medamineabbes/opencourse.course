@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,27 +30,26 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class CourseController {
     private final CourseService courseService;
-    //user must be teacher/admin
+    //user must be teacher
     @PostMapping
     public ResponseEntity<Long> addCourse(@Valid @RequestBody(required = true) CourseDto courseDto){
-        //get user id from token
-        Long userId=15L;
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(courseService.addCourse(courseDto,userId));
     }
 
     //user can be anyone
     @GetMapping("/{id}")
     public ResponseEntity<CourseDto> getCourse(@PathVariable(required = true) Long id){
-        //get user id from token
-        Long userId=15L;
+
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         return ResponseEntity.ok(courseService.getCourseByIdAsClient(id, userId));
     }
 
     //user must be teacher
     @PutMapping
     public ResponseEntity<Object> updateCourse(@Valid @RequestBody(required = true) CourseDto courseDto){
-        //get user id from token
-        Long userId=15L;
+
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         courseService.updateCourse(courseDto, userId);
         return ResponseEntity.ok().build();
     }
@@ -57,8 +57,7 @@ public class CourseController {
     //user can be anyone
     @GetMapping
     public ResponseEntity<Page<CourseDto>> searchForCourse(@RequestParam(required = true) String title,@RequestParam(defaultValue = "0") int page){
-        //get user id from token
-        Long userId=15L;
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         //page size is 20 for now
         int pageSize=20;
         Pageable pageable=PageRequest.of(page, pageSize);
@@ -66,7 +65,7 @@ public class CourseController {
     }
 
     //user must be admin
-    @GetMapping("/paid/{id}")
+    @PutMapping("/paid/{id}")
     public ResponseEntity<Object> setCourseAsPaid(@PathVariable(required = true) Long id){
         
         //user must be admin
@@ -75,7 +74,7 @@ public class CourseController {
     }
 
     //user must be admin
-    @GetMapping("/free/{id}")
+    @PutMapping("/free/{id}")
     public ResponseEntity<Object> setCourseAsFree(@PathVariable(required = true) Long id){
 
         courseService.setCourseAsFree(id);
@@ -83,10 +82,10 @@ public class CourseController {
     }
 
     //user must be teacher
-    @GetMapping("/active/{id}")
+    @PutMapping("/active/{id}")
     public ResponseEntity<Object> activateCourse(@PathVariable(required = true) Long id){
-        //get user  id from token
-        Long userId=15L;
+
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         courseService.activateCourse(id, userId);
 
         return ResponseEntity.ok().build();
@@ -96,8 +95,7 @@ public class CourseController {
     @GetMapping("/certificate/{courseId}")
     public ResponseEntity<?> getCourseSertificate(@PathVariable(required = true) Long courseId) throws IOException, WriterException{
 
-        //get user id from token
-        Long userId=15L;
+        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
         
         return ResponseEntity
         .ok()
