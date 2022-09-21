@@ -41,7 +41,12 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<CourseDto> getCourse(@PathVariable(required = true) Long id){
 
-        Long userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+        Long userId;
+        try{
+            userId=Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
+        }catch(Exception e){
+            userId=null;
+        }
         return ResponseEntity.ok(courseService.getCourseByIdAsClient(id, userId));
     }
 
